@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS hw_user (id UUID, email VARCHAR(72), g_id VARCHAR(10));

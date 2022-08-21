@@ -1,1 +1,0 @@
-CREATE TABLE hw_user (id UUID, email VARCHAR(72), g_id VARCHAR(10));
