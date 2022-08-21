@@ -1,6 +1,6 @@
 package com.hackerwave.auth.entity
 
-import com.hackerwave.auth.dto.HwUserDto
+import com.hackerwave.auth.dto.UserDto
 import java.util.*
 import javax.persistence.*
 
@@ -25,7 +25,7 @@ class HwUser(
         }
     }
 
-    fun toDto():HwUserDto{
-        return HwUserDto(id, email, gId)
+    fun toDto():UserDto{
+        return UserDto(id, email, gId)
     }
 }

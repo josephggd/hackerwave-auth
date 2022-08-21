@@ -7,5 +7,5 @@ import java.util.*
 
 @Repository
 interface HwUserRepository: JpaRepository<HwUser, UUID> {
-    fun findByGIdAndEmail(gId:String, email: String): Optional<HwUser>
+    fun findBygIdAndEmail(gId:String, email: String): Optional<HwUser>
 }

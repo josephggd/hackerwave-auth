@@ -6,7 +6,7 @@ object CommonStrings {
     const val userNotFoundExceptionMsg = "USER %s NOT FOUND"
     const val userExistsExceptionMsg = "USER %s ALREADY EXISTS"
     const val badJwtExceptionMsg = "BAD JWT"
-    enum class FunctionState() {
+    enum class FunctionState {
         ATTEMPT,
         PERMIT,
         FAILURE
@@ -18,4 +18,13 @@ object CommonStrings {
     const val emailJwtKey = "email"
     const val subJwtKey = "sub"
     const val noCredentials = "NoCredentials"
+    // kafka
+    const val loginHistoryTopic = "login-history"
+    enum class UserAction {
+        LOGIN,
+        POST,
+        LIKE,
+        UNLIKE
+    }
+    const val loginHistoryStore = "login-history-store"
 }
