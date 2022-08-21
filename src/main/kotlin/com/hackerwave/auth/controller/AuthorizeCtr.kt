@@ -4,6 +4,7 @@ import com.hackerwave.auth.entity.HwUser
 import com.hackerwave.auth.service.AuthSvc
 import com.hackerwave.auth.util.CommonStrings
 import com.hackerwave.auth.util.CommonStrings.loggerMsg
+import com.hackerwave.auth.util.exception.UserNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -29,7 +30,7 @@ class AuthorizeCtr(
             return ResponseEntity
                 .ok()
                 .build()
-        } catch (expectedException: IllegalArgumentException){
+        } catch (expectedException: UserNotFoundException){
             logger.warn(loggerMsg, CommonStrings.FunctionState.FAILURE, functionDescr)
             return ResponseEntity
                 .badRequest()
