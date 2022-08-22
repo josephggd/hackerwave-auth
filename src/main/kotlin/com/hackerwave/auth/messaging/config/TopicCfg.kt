@@ -14,14 +14,12 @@ class TopicCfg {
     @Bean
     fun buildLoginTopic(): NewTopic {
         return TopicBuilder.name(defaultTopic)
-            .replicas(2)
             .build()
     }
 
     @Bean
     fun buildLoginHistoryTopic(): NewTopic {
         return TopicBuilder.name(loginHistoryTopic)
-            .replicas(2)
             .build()
     }
 }
