@@ -1,6 +1,6 @@
 package com.hackerwave.auth.controller
 
-import com.hackerwave.auth.dto.LoginDto
+import com.hackerwave.auth.dto.ActionDto
 import com.hackerwave.auth.entity.HwUser
 import com.hackerwave.auth.service.AuthSvc
 import com.hackerwave.auth.util.CommonStrings
@@ -27,12 +27,12 @@ class AuthenticateCtr(
     @PostMapping("un")
     fun authenticateUser(
         @RequestHeader(name=authorizationHeader) authHeader: String,
-        @RequestBody loginDto: LoginDto,
+        @RequestBody ActionDto: ActionDto,
     ):ResponseEntity<String> {
         val functionDescr = "authenticateUser"
         logger.info(loggerMsg, CommonStrings.FunctionState.ATTEMPT, functionDescr)
         try {
-            val hwUser: HwUser = authSvc.logInUserWithAuthHeader(authHeader, loginDto)
+            val hwUser: HwUser = authSvc.authenticateUnauthenticatedUser(authHeader)
             val newAuth = encodeToJwt(hwUser)
             return ResponseEntity
                 .ok()
@@ -54,12 +54,12 @@ class AuthenticateCtr(
     @PostMapping("nw")
     fun signUpUser(
         @RequestHeader(name=authorizationHeader) authHeader: String,
-        @RequestBody loginDto: LoginDto,
+        @RequestBody ActionDto: ActionDto,
     ):ResponseEntity<String>{
         val functionDescr = "signUpUser"
         logger.info(loggerMsg, CommonStrings.FunctionState.ATTEMPT, functionDescr)
         try {
-            val hwUser:HwUser = authSvc.signUpUser(authHeader, loginDto)
+            val hwUser:HwUser = authSvc.signUpNewUser(authHeader)
             val newAuth = encodeToJwt(hwUser)
             return ResponseEntity
                 .ok()

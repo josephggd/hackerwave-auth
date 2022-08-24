@@ -19,12 +19,15 @@ object CommonStrings {
     const val subJwtKey = "sub"
     const val noCredentials = "NoCredentials"
     // kafka
-    const val loginHistoryTopic = "login-history"
+    const val historyTopic = "history-topic"
     enum class UserAction {
+        CREATE_ACCT,
+        DELETE_ACCT,
         LOGIN,
         POST,
-        LIKE,
-        UNLIKE
+        DELETE_POST,
+        LIKE_POST,
+        UNLIKE_POST,
     }
-    const val loginHistoryStore = "login-history-store"
+    const val historyStore = "history-store"
 }

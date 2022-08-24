@@ -1,6 +1,6 @@
 package com.hackerwave.auth.controller
 
-import com.hackerwave.auth.dto.LoginHistoryDto
+import com.hackerwave.auth.dto.HistoryDto
 import com.hackerwave.auth.messaging.service.ConsumerSvc
 import com.hackerwave.auth.util.CommonStrings
 import com.hackerwave.auth.util.CommonStrings.loggerMsg
@@ -23,11 +23,11 @@ class MetricsCtr(
     @PostMapping("byUser")
     fun getMetricsByUserId(
         @RequestParam id: UUID
-    ): ResponseEntity<LoginHistoryDto> {
+    ): ResponseEntity<HistoryDto> {
         val functionDescr = "getMetricsByUserId"
         logger.info(loggerMsg, CommonStrings.FunctionState.ATTEMPT, functionDescr)
         try {
-            val loginHistoryDto = consumerSvc.findLoginHistory(id)
+            val loginHistoryDto = consumerSvc.groupByAction(id)
             return ResponseEntity
                 .ok()
                 .body(loginHistoryDto)

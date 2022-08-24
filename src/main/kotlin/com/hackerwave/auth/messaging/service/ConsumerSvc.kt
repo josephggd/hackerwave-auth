@@ -1,9 +1,9 @@
 package com.hackerwave.auth.messaging.service
 
-import com.hackerwave.auth.dto.LoginHistoryDto
+import com.hackerwave.auth.dto.HistoryDto
 import com.hackerwave.auth.util.CommonStrings
 import com.hackerwave.auth.util.CommonStrings.loggerMsg
-import com.hackerwave.auth.util.CommonStrings.loginHistoryStore
+import com.hackerwave.auth.util.CommonStrings.historyStore
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.StoreQueryParameters
 import org.apache.kafka.streams.state.QueryableStoreTypes
@@ -17,18 +17,18 @@ import java.util.*
 @Service
 class ConsumerSvc @Autowired constructor(private val kafkaStreams: KafkaStreams) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
-    fun findLoginHistory(id: UUID): LoginHistoryDto? {
+    fun groupByAction(id: UUID): HistoryDto? {
         logger.info(loggerMsg, CommonStrings.FunctionState.ATTEMPT, "findOrderHistory")
         return store[id.toString()]
     }
 
-    val store: ReadOnlyKeyValueStore<String, LoginHistoryDto>
+    val store: ReadOnlyKeyValueStore<String, HistoryDto>
         get() {
             logger.info(loggerMsg, CommonStrings.FunctionState.ATTEMPT, "getStore")
             return kafkaStreams
-                .store<ReadOnlyKeyValueStore<String, LoginHistoryDto>>(
+                .store<ReadOnlyKeyValueStore<String, HistoryDto>>(
                     StoreQueryParameters.fromNameAndType(
-                        loginHistoryStore,
+                        historyStore,
                         QueryableStoreTypes.keyValueStore()
                     )
                 )

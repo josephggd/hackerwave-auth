@@ -1,4 +1,5 @@
-FROM openjdk:17
+FROM openjdk:11
+EXPOSE 8080
 MAINTAINER hackerwave.com
-COPY target/auth-1.0.0.jar auth-1.0.0.jar
-ENTRYPOINT ["java","-jar","/auth-1.0.0.jar"]
+COPY target/hw-auth-0.0.1-SNAPSHOT.jar hw-auth-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","/hw-auth-0.0.1-SNAPSHOT.jar"]

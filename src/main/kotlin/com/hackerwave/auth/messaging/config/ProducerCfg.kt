@@ -1,6 +1,6 @@
 package com.hackerwave.auth.messaging.config
 
-import com.hackerwave.auth.dto.LoginDto
+import com.hackerwave.auth.dto.ActionDto
 import com.hackerwave.auth.util.CommonStrings
 import com.hackerwave.auth.util.CommonStrings.loggerMsg
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -29,7 +29,7 @@ class ProducerCfg {
     private val groupId: String? = null
     @Bean
     @ConditionalOnProperty(name = ["cloudkarafka.enabled"], havingValue = "true")
-    fun cloudProducerFactory(): ProducerFactory<String, LoginDto> {
+    fun cloudProducerFactory(): ProducerFactory<String, ActionDto> {
         logger.info(loggerMsg, CommonStrings.FunctionState.ATTEMPT, "cloudProducerFactory")
         val props: MutableMap<String, Any?> = HashMap()
         props["group.id"] = groupId
@@ -48,7 +48,7 @@ class ProducerCfg {
 
     @Bean
     @ConditionalOnProperty(name = ["cloudkarafka.enabled"], havingValue = "false")
-    fun devProducerFactory(): ProducerFactory<String, LoginDto> {
+    fun devProducerFactory(): ProducerFactory<String, ActionDto> {
         logger.info(loggerMsg, CommonStrings.FunctionState.ATTEMPT, "devProducerFactory")
         val props: MutableMap<String, Any?> = HashMap()
         props["group.id"] = groupId
@@ -59,8 +59,8 @@ class ProducerCfg {
     }
 
     @Bean
-    fun kafkaTemplate(kafkaProducerFactory: ProducerFactory<String, LoginDto>): KafkaTemplate<String, LoginDto> {
-        val kafkaTemplate: KafkaTemplate<String, LoginDto> = KafkaTemplate(kafkaProducerFactory)
+    fun kafkaTemplate(kafkaProducerFactory: ProducerFactory<String, ActionDto>): KafkaTemplate<String, ActionDto> {
+        val kafkaTemplate: KafkaTemplate<String, ActionDto> = KafkaTemplate(kafkaProducerFactory)
         kafkaProducerFactory.createProducer()
         return kafkaTemplate
     }

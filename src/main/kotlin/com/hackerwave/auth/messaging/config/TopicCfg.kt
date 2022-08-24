@@ -1,6 +1,6 @@
 package com.hackerwave.auth.messaging.config
 
-import com.hackerwave.auth.util.CommonStrings.loginHistoryTopic
+import com.hackerwave.auth.util.CommonStrings.historyTopic
 import org.apache.kafka.clients.admin.NewTopic
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -19,7 +19,7 @@ class TopicCfg {
 
     @Bean
     fun buildLoginHistoryTopic(): NewTopic {
-        return TopicBuilder.name(loginHistoryTopic)
+        return TopicBuilder.name(historyTopic)
             .build()
     }
 }
