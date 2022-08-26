@@ -23,9 +23,9 @@ class KafkaSvc(
     }
 
     fun submitAction(
-        ActionDto: ActionDto
+        actionDto: ActionDto
     ) {
         logger.info(loggerMsg, CommonStrings.FunctionState.ATTEMPT, "submitAction")
-        template.send(defaultTopic!!, ActionDto.action.toString(), ActionDto)
+        template.send(defaultTopic!!, actionDto)
     }
 }

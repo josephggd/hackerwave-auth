@@ -1,9 +1,8 @@
 package com.hackerwave.auth.messaging
 
 import com.hackerwave.auth.dto.ActionDto
-import com.hackerwave.auth.dto.HistoryDto
-import com.hackerwave.auth.util.CommonStrings.historyStore
-import com.hackerwave.auth.util.CommonStrings.historyTopic
+import com.hackerwave.auth.dto.ActionAggDto
+import com.hackerwave.auth.util.MsgFunctions.determineGrouping
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.StreamsBuilder
@@ -15,25 +14,26 @@ import org.apache.kafka.streams.kstream.Produced
 import org.apache.kafka.streams.state.KeyValueStore
 import org.springframework.kafka.support.serializer.JsonSerde
 
-object StreamTopology {
-    fun buildTopology(topic: String?): Topology {
+object ActionAggTopology {
+
+    fun buildTopology(inputTopic: String?, grouping:String, outputStore: String?, outputTopic: String?): Topology {
         val streamsBuilder = StreamsBuilder()
         val loginJsonSerde: JsonSerde<ActionDto> = JsonSerde<ActionDto>(ActionDto::class.java)
-        val loginHistoryJsonSerde: JsonSerde<HistoryDto> = JsonSerde<HistoryDto>(HistoryDto::class.java)
-        val stringLoginHistoryKStream: KStream<String, HistoryDto> = streamsBuilder.stream(
-            topic,
+        val loginHistoryJsonSerde: JsonSerde<ActionAggDto> = JsonSerde<ActionAggDto>(ActionAggDto::class.java)
+        val stringLoginHistoryKStream: KStream<String, ActionAggDto> = streamsBuilder.stream(
+            inputTopic,
             Consumed.with(Serdes.String(), loginJsonSerde)
         )
-            .groupByKey()
+            .groupBy { _, value -> determineGrouping(grouping, value) }
             .aggregate(
-                { HistoryDto() },
+                { ActionAggDto() },
                 { _, value, aggregate -> aggregate.aggregate(value) },
-                Materialized.`as`<String, HistoryDto, KeyValueStore<Bytes, ByteArray>>(historyStore)
+                Materialized.`as`<String, ActionAggDto, KeyValueStore<Bytes, ByteArray>>(outputStore)
                     .withKeySerde(Serdes.String())
                     .withValueSerde(loginHistoryJsonSerde)
             )
             .toStream()
-        stringLoginHistoryKStream.to(historyTopic, Produced.with(Serdes.String(), loginHistoryJsonSerde))
+        stringLoginHistoryKStream.to(outputTopic, Produced.with(Serdes.String(), loginHistoryJsonSerde))
         return streamsBuilder.build()
     }
 }

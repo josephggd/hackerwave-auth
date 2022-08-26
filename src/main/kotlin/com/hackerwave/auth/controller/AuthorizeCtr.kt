@@ -1,6 +1,5 @@
 package com.hackerwave.auth.controller
 
-import com.hackerwave.auth.dto.ActionDto
 import com.hackerwave.auth.entity.HwUser
 import com.hackerwave.auth.service.AuthSvc
 import com.hackerwave.auth.util.CommonStrings
@@ -9,7 +8,10 @@ import com.hackerwave.auth.util.exception.UserNotFoundException
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RestController
 
 @Tag(name="Authorization API", description = "Determine access to resources using USER ID")
 @RestController("api/\${custom.api.prefix.version}/\${custom.api.prefix.authorization}/")
