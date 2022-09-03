@@ -2,8 +2,8 @@ package com.hackerwave.auth.messaging.config
 
 import com.hackerwave.auth.messaging.DateAggTopology
 import com.hackerwave.auth.util.CommonStrings
-import com.hackerwave.auth.util.CommonStrings.dateStore
-import com.hackerwave.auth.util.CommonStrings.dateTopic
+import com.hackerwave.auth.util.CommonStrings.gpByAllStore
+import com.hackerwave.auth.util.CommonStrings.gpByAllTopic
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.KafkaStreams
@@ -45,12 +45,7 @@ class DateStreamCfg : StreamCfg() {
     @Bean
     @Autowired
     fun dateStream(@Qualifier("dateProperties") dateProperties:Properties): KafkaStreams {
-        val topology: Topology = DateAggTopology.buildTopology(
-            defaultTopic,
-            CommonStrings.Grouping.DATE.toString(),
-            dateStore,
-            dateTopic
-        )
+        val topology: Topology = DateAggTopology.buildTopology(defaultTopic)
         val kafkaStreams = KafkaStreams(topology, dateProperties)
         kafkaStreams.cleanUp()
         kafkaStreams.start()

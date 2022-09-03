@@ -1,6 +1,10 @@
 package com.hackerwave.auth.util
 
+import java.time.format.DateTimeFormatter
+
 object CommonStrings {
+    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss")
     // logging
     const val loggerMsg = "|| STATE:{} | DESCR: {} ||"
     const val userNotFoundExceptionMsg = "USER %s NOT FOUND"
@@ -19,8 +23,8 @@ object CommonStrings {
     const val subJwtKey = "sub"
     const val noCredentials = "NoCredentials"
     // kafka
-    const val actionTopic = "action-topic"
-    const val dateTopic = "date-topic"
+    const val gpByDateTopic = "action-topic"
+    const val gpByAllTopic = "date-topic"
     enum class UserAction {
         CREATE_ACCT,
         DELETE_ACCT,
@@ -34,6 +38,6 @@ object CommonStrings {
         ACTION,
         DATE,
     }
-    const val actionStore = "action-store"
-    const val dateStore = "date-store"
+    const val gpByDateStore = "action-store"
+    const val gpByAllStore = "date-store"
 }

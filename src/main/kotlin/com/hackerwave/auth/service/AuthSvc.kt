@@ -8,7 +8,6 @@ import com.hackerwave.auth.util.CommonStrings.emailJwtKey
 import com.hackerwave.auth.util.CommonStrings.loggerMsg
 import com.hackerwave.auth.util.CommonStrings.subJwtKey
 import com.hackerwave.auth.util.JwtFunctions.decodeFieldFromJwt
-import com.hackerwave.auth.util.MsgFunctions.generateAction
 import com.hackerwave.auth.util.exception.UserExistsException
 import com.hackerwave.auth.util.exception.UserNotFoundException
 import org.slf4j.LoggerFactory
@@ -42,8 +41,7 @@ class AuthSvc(
         val gId = decodeFieldFromJwt(subJwtKey, authHeader)
         val newUser = HwUser(email, gId)
         val savedUser = hwUserRepository.save(newUser)
-        val action = generateAction(CommonStrings.UserAction.CREATE_ACCT)
-        kafkaSvc.submitAction(action)
+        kafkaSvc.submitAction(CommonStrings.UserAction.CREATE_ACCT)
         return savedUser
     }
 
@@ -52,9 +50,8 @@ class AuthSvc(
         val email = decodeFieldFromJwt(emailJwtKey, authHeader)
         val gId = decodeFieldFromJwt(subJwtKey, authHeader)
         val newUser = HwUser(email, gId)
-        val savedUser = hwUserRepository.delete(newUser)
-        val action = generateAction(CommonStrings.UserAction.DELETE_ACCT)
-        kafkaSvc.submitAction(action)
+        hwUserRepository.delete(newUser)
+        kafkaSvc.submitAction(CommonStrings.UserAction.DELETE_ACCT)
     }
 
     fun authenticateUnauthenticatedUser(authHeader:String):HwUser{
@@ -62,8 +59,7 @@ class AuthSvc(
         val gId = decodeFieldFromJwt(CommonStrings.issuerJwtKey, authHeader)
         val email = decodeFieldFromJwt(emailJwtKey, authHeader)
         val loggedInUser = findUserBygIdAndEmail( email, gId )
-        val action = generateAction(CommonStrings.UserAction.LOGIN)
-        kafkaSvc.submitAction(action)
+        kafkaSvc.submitAction(CommonStrings.UserAction.LOGIN)
         return loggedInUser
     }
 
@@ -83,8 +79,7 @@ class AuthSvc(
         val localIdAsString = decodeFieldFromJwt(subJwtKey, authHeader)
         val localId = UUID.fromString(localIdAsString)
         val authorizedUser = findUserById( localId )
-        val action = generateAction(CommonStrings.UserAction.LOGIN)
-        kafkaSvc.submitAction(action)
+        kafkaSvc.submitAction(CommonStrings.UserAction.LOGIN)
         return authorizedUser
     }
 }

@@ -1,9 +1,9 @@
 package com.hackerwave.auth.messaging.config
 
-import com.hackerwave.auth.messaging.ActionAggTopology
+import com.hackerwave.auth.messaging.AllAggTopology
 import com.hackerwave.auth.util.CommonStrings
-import com.hackerwave.auth.util.CommonStrings.actionStore
-import com.hackerwave.auth.util.CommonStrings.actionTopic
+import com.hackerwave.auth.util.CommonStrings.gpByDateStore
+import com.hackerwave.auth.util.CommonStrings.gpByDateTopic
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.KafkaStreams
@@ -43,12 +43,7 @@ class ActionStreamCfg : StreamCfg() {
     @Bean
     @Autowired
     fun actionStream(@Qualifier("actionProperties") actionProperties:Properties): KafkaStreams {
-        val topology: Topology = ActionAggTopology.buildTopology(
-            defaultTopic,
-            CommonStrings.Grouping.ACTION.toString(),
-            actionStore,
-            actionTopic
-        )
+        val topology: Topology = AllAggTopology.buildTopology(defaultTopic)
         val kafkaStreams = KafkaStreams(topology, actionProperties)
         kafkaStreams.cleanUp()
         kafkaStreams.start()

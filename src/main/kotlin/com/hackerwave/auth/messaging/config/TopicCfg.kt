@@ -1,7 +1,7 @@
 package com.hackerwave.auth.messaging.config
 
-import com.hackerwave.auth.util.CommonStrings.actionTopic
-import com.hackerwave.auth.util.CommonStrings.dateTopic
+import com.hackerwave.auth.util.CommonStrings.gpByAllTopic
+import com.hackerwave.auth.util.CommonStrings.gpByDateTopic
 import org.apache.kafka.clients.admin.NewTopic
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -19,14 +19,14 @@ class TopicCfg {
     }
 
     @Bean
-    fun buildActionAggTopic(): NewTopic {
-        return TopicBuilder.name(actionTopic)
+    fun buildAllAggTopic(): NewTopic {
+        return TopicBuilder.name(gpByDateTopic)
             .build()
     }
 
-//    @Bean
-//    fun buildDateAggTopic(): NewTopic {
-//        return TopicBuilder.name(dateTopic)
-//            .build()
-//    }
+    @Bean
+    fun buildDateAggTopic(): NewTopic {
+        return TopicBuilder.name(gpByAllTopic)
+            .build()
+    }
 }

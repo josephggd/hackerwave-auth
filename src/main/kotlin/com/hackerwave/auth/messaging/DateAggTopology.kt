@@ -2,7 +2,8 @@ package com.hackerwave.auth.messaging
 
 import com.hackerwave.auth.dto.ActionDto
 import com.hackerwave.auth.dto.DateAggDto
-import com.hackerwave.auth.util.MsgFunctions.determineGrouping
+import com.hackerwave.auth.util.CommonStrings
+import com.hackerwave.auth.util.CommonStrings.gpByDateStore
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.StreamsBuilder
@@ -16,7 +17,7 @@ import org.springframework.kafka.support.serializer.JsonSerde
 
 object DateAggTopology {
 
-    fun buildTopology(inputTopic: String?, grouping:String, outputStore: String?, outputTopic: String?): Topology {
+    fun buildTopology(inputTopic: String?): Topology {
         val streamsBuilder = StreamsBuilder()
         val loginJsonSerde: JsonSerde<ActionDto> = JsonSerde<ActionDto>(ActionDto::class.java)
         val loginHistoryJsonSerde: JsonSerde<DateAggDto> = JsonSerde<DateAggDto>(DateAggDto::class.java)
@@ -24,16 +25,16 @@ object DateAggTopology {
             inputTopic,
             Consumed.with(Serdes.String(), loginJsonSerde)
         )
-            .groupBy { _, value -> determineGrouping(grouping, value) }
+            .groupBy { _, value -> value.date }
             .aggregate(
                 { DateAggDto() },
                 { _, value, aggregate -> aggregate.aggregate(value) },
-                Materialized.`as`<String, DateAggDto, KeyValueStore<Bytes, ByteArray>>(outputStore)
+                Materialized.`as`<String, DateAggDto, KeyValueStore<Bytes, ByteArray>>(gpByDateStore)
                     .withKeySerde(Serdes.String())
                     .withValueSerde(loginHistoryJsonSerde)
             )
             .toStream()
-        stringLoginHistoryKStream.to(outputTopic, Produced.with(Serdes.String(), loginHistoryJsonSerde))
+        stringLoginHistoryKStream.to(CommonStrings.gpByDateTopic, Produced.with(Serdes.String(), loginHistoryJsonSerde))
         return streamsBuilder.build()
     }
 }

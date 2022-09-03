@@ -41,7 +41,7 @@ class ConsumerSvc @Autowired constructor(
             return actionStream
                 .store<ReadOnlyKeyValueStore<String, ActionAggDto>>(
                     StoreQueryParameters.fromNameAndType(
-                        CommonStrings.actionStore,
+                        CommonStrings.gpByDateStore,
                         QueryableStoreTypes.keyValueStore()
                     )
                 )
@@ -53,7 +53,7 @@ class ConsumerSvc @Autowired constructor(
             return dateStream
                 .store<ReadOnlyKeyValueStore<String, DateAggDto>>(
                     StoreQueryParameters.fromNameAndType(
-                        CommonStrings.dateStore,
+                        CommonStrings.gpByAllStore,
                         QueryableStoreTypes.keyValueStore()
                     )
                 )

@@ -3,7 +3,6 @@ package com.hackerwave.auth.controller
 import com.hackerwave.auth.messaging.service.ConsumerSvc
 import com.hackerwave.auth.util.CommonStrings
 import com.hackerwave.auth.util.CommonStrings.loggerMsg
-import com.hackerwave.auth.util.exception.UserNotFoundException
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
